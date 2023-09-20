@@ -12,7 +12,8 @@ namespace SignalR.StockTicker
 	public class StockTicker
 	{
 		// Singleton instance
-		private static readonly Lazy<StockTicker> _instance = new Lazy<StockTicker>(() => new StockTicker(GlobalHost.ConnectionManager.GetHubContext<StockTickerHub>().Clients));
+		private static readonly Lazy<StockTicker> _instance = new Lazy<StockTicker>(
+			() => new StockTicker(GlobalHost.ConnectionManager.GetHubContext<StockTickerHub>().Clients));
 
 		// Using concurrentDictionary negates the need to lock the dictionary when changing values
 		private readonly ConcurrentDictionary<string, Stock> _stocks = new ConcurrentDictionary<string, Stock>();
@@ -108,6 +109,8 @@ namespace SignalR.StockTicker
 
 		private void BroadcastStockPrice(Stock stock)
 		{
+			// because 'Clients.All' is dynamic the method can be called here
+			// without existing yet; this will be resolved at runtime
 			Clients.All.updateStockPrice(stock);
 		}
 	}
