@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using ShopOnline.API.Data;
 using ShopOnline.API.Entities;
 using ShopOnline.API.Repositories.Contracts;
@@ -25,14 +26,17 @@ namespace ShopOnline.API.Repositories
 			return categories;
 		}
 
-		public Task<Product> GetItme(int id)
+		public async Task<Product> GetItem(int id)
 		{
-			throw new NotImplementedException();
+			var product = await _context.Products.FindAsync(id);
+			return product;
 		}
 
-		public Task<ProductCategory> GetCategory(int id)
+		public async Task<ProductCategory> GetCategory(int id)
 		{
-			throw new NotImplementedException();
+			var category = await _context.ProductCategories.SingleOrDefaultAsync(c => c.Id == id);
+			return category;
+			
 		}
 	}
 }

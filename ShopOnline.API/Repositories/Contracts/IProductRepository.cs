@@ -6,7 +6,7 @@ namespace ShopOnline.API.Repositories.Contracts
 	{
 		Task<IEnumerable<Product>> GetItems();
 		Task<IEnumerable<ProductCategory>> GetCategories();
-		Task<Product> GetItme(int id);
+		Task<Product> GetItem(int id);
 		Task<ProductCategory> GetCategory(int id);
 
 	}
