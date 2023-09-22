@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using ShopOnline.API.Data;
+using ShopOnline.API.Repositories;
+using ShopOnline.API.Repositories.Contracts;
 
 namespace ShopOnline.API
 {
@@ -20,6 +23,8 @@ namespace ShopOnline.API
 				options.UseSqlServer(builder.Configuration.GetConnectionString("ShopOnlineConnection"))
 			);
 
+			builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -28,6 +33,13 @@ namespace ShopOnline.API
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+
+			app.UseCors(policy =>
+				policy.WithOrigins("https://localhost:7258", "http://localhost:5050")
+					.AllowAnyMethod()
+					.WithHeaders(HeaderNames.ContentType)
+
+			);
 
 			app.UseHttpsRedirection();
 
