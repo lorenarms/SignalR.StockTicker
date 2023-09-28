@@ -136,5 +136,28 @@ namespace ShopOnline.API.Controllers
             }
         }
         
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult<CartItemDto>> UpdateQty (int id, CartItemQtyUpdateDto cartItemUpdateDto) 
+        {
+            var cartItem = await this.shoppingCartRepository.UpdateQty(id, cartItemUpdateDto);
+            try
+            {
+                if (cartItem == null)
+                {
+                    return NotFound();
+                }
+                var product = await productRepository.GetItem(cartItem.ProductId);
+                var cartItemDto = cartItem.ConvertToDto(product);
+                return Ok(cartItemDto);    
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            
+
+
+        }
     }
 }
